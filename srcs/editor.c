@@ -6,7 +6,7 @@
 /*   By: jsauron <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/10 10:49:12 by jsauron           #+#    #+#             */
-/*   Updated: 2019/07/10 16:50:28 by jsauron          ###   ########.fr       */
+/*   Updated: 2019/07/10 19:09:04 by jsauron          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,10 +24,10 @@ void	editor(t_win *wn, t_game *game)
 	int j = 0;
 	int map[XBLOC][YBLOC] = {};
 
-	game->wall = IMG_Load("mur.jpg");
-	game->bloc = IMG_Load("caisse.jpg");
-	game->goal = IMG_Load("objectif.jpg");
-	game->player = IMG_Load("mario_bas.jpg");
+	game->wall = IMG_Load("sprites_mario/mur.jpg");
+	game->bloc = IMG_Load("sprites_mario/caisse.jpg");
+	game->goal = IMG_Load("sprites_mario/objectif.png");
+	game->player = IMG_Load("sprites_mario/mario_bas.gif");
 
 	if(!upload_level(map))
 		exit(EXIT_FAILURE);

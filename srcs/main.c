@@ -55,7 +55,7 @@ int	main()
 		SDL_BlitSurface(wn->menu, NULL, wn->screen, &(wn->pos_menu));
 	//	wn->texture = SDL_CreateTextureFromSurface(wn->render, wn->menu);
 		SDL_UpdateTexture(wn->texture, NULL, wn->screen->pixels, wn->screen->pitch);
-	//	SDL_RenderClear(wn->render);
+		SDL_RenderClear(wn->render);
 		SDL_RenderCopy(wn->render, wn->texture, NULL, NULL);
 		SDL_RenderPresent(wn->render);
 	}

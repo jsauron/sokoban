@@ -6,13 +6,13 @@
 #    By: jsauron <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/10 16:14:33 by jsauron           #+#    #+#              #
-#    Updated: 2019/07/10 17:52:21 by jsauron          ###   ########.fr        #
+#    Updated: 2019/07/10 19:33:35 by jsauron          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 		= sokoban
 CC 			= clang
-CFLAGS 		= -Wall -Wextra -Werror -g -O3 #-fsanitize=address
+CFLAGS 		= -Wall -Wextra -Werror -g -fsanitize=address
 
 ID_UN 		= $(shell id -un)
 SRC_PATH 	= srcs/
