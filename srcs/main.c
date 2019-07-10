@@ -1,46 +1,59 @@
 #include "../includes/sokoban.h"
 
-int	main(int ac, char **av)
+int	main()
 {
-    SDL_Surface	*screen;
-    SDL_Rect	pos_menu;
-    SDL_Event	event;
+	struct t_win	*wn;
 
-    int play = 1;
+	if (!(wn = malloc(sizeof(struct t_win ))))
+		exit (1);
+	if (!(wn->game = malloc(sizeof(struct t_game ))))
+		exit (1);
+	
+		int play = 1;
 
-    SDL_Init(SDL_INIT_VIDEO);
+	SDL_Init(SDL_INIT_VIDEO);
 
-    SDL_WM_SetIcon(IMG_Load("../sprites_mario/caisse.jpg"), NULL);
-    screen = SDL_SetVideoMode(XSCREEN, YSCREEN, 32, SDL_HWSURFACE | SDL_DOUBLEBUF);
-    SDL_WM_SetCaption("Mario Sokoban", NULL);
+	wn->window = SDL_CreateWindow("SOKOBAN", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, XSCREEN, YSCREEN, SDL_WINDOW_RESIZABLE);
+	wn->icon = IMG_Load("../sprites_mario/caisse.jpg"); 
+	SDL_SetWindowIcon(wn->window, wn->icon);
+	wn->screen = SDL_CreateRGBSurface(0, XSCREEN, YSCREEN, 32,
+			0x00FF0000,
+			0x0000FF00,
+			0x000000FF,
+			0xFF000000);
+	/*SDL_Texture *sdlTexture = SDL_CreateTexture(sdlRenderer,
+			SDL_PIXELFORMAT_ARGB8888,
+			SDL_TEXTUREACCESS_STREAMING,
+			XSCREEN, YSCREEN);
+*/
+	wn->render = SDL_CreateRenderer(wn->window, -1, 0);
+	wn->menu = IMG_Load("menu.jpg");
+	wn->pos_menu.x = 0;
+	wn->pos_menu.y = 0;
 
-    menu = IMG_Load("menu.jpg");
-    pos_menu.x = 0;
-    pos_menu.y = 0;
+	while (play)
+	{
+		SDL_WaitEvent(&(wn->event));
+		if (wn->event.type == SDL_QUIT)
+			play = 0;
+		else if  (wn->event.type == SDL_KEYDOWN)
+		{
+			if (wn->event.key.keysym.sym == SDL_SCANCODE_ESCAPE)
+				play = 0;
+			else if (wn->event.key.keysym.sym == SDL_SCANCODE_1)
+				active_game(wn);
+			else if (wn->event.key.keysym.sym == SDL_SCANCODE_2)
+				editor(wn, wn->game);
+		}
 
-    while (play)
-    {
-        SDL_WaitEvent(&event);
-        if (event.type == SDL_QUIT)
-            play = 0;
-        else if  (event.type == SDL_Keydown)
-        {
-            if (event.key.keysym.sym == SDLK_ESCAPE)
-                play = 0;
-            else if (event.key.keysym.sym == SDLK_KP1)
-                active_game(screen);
-            else if (event.key.keysym.sym == SDLK_KP2)
-                editor(screen);
-        }				
+		SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 0, 0, 0));
+		SDL_BlitSurface(wn->menu, NULL, wn->screen, &(wn->pos_menu));
+	//	sdlTexture = SDL_CreateTextureFromSurface(sdlRenderer, mySurface);
+		SDL_RenderPresent(wn->render);
+	}
+	SDL_FreeSurface(wn->menu);
+	SDL_Quit();
 
-    
-        SDL_FillRect(screen, NULL, SDL_MapRGB(ecran->format, 0, 0, 0));
-        SDL_BlitSurface(menu, NULL, screen, pos_menu);
-        SDL_Flip(screen);    
-    }
-    SDL_FreeSurface(menu);
-    SDL_Quit();
-
-    return EXIT_SUCESS;
+	return (0);
 }
 

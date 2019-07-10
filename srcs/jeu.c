@@ -1,16 +1,20 @@
 #include "../includes/sokoban.h"
 
-void    acive_game(SDL_Surface *screen)
+void    acive_game(struct t_win *wn)
 {
-    SDL_Surface    *player[4] = {NULL};
-    SDL_Surface    *wall = NULL;
-    SDL_Surface    *caisse = NULL;
-    SDL_Surface    *caisse_ok = NULL;
-    SDL_Surface    *objectif = NULL;
-    SDL_Surface    *curent_player = NULL;
+	struct t_game	*game;
 
-    SDL_Rect       °pos;
-    SDL_Rect       °pos_player;
+	game = wn->game; 
+	game = wn->game;
+    //game->player_tab[4];/* = {NULL, NULL, NULL, NULL};*/
+    game->wall = NULL;
+    game->bloc = NULL;
+    game->bloc_OK = NULL;
+    game->goal = NULL;
+    game->current_player = NULL;
+
+    SDL_Rect       pos;
+    SDL_Rect       pos_player;
 
     SDL_Event      event;
 
@@ -18,19 +22,19 @@ void    acive_game(SDL_Surface *screen)
     int goal = 0;
     int i = 0;
     int j = 0;
-    int pl = 0;
-    int map[XBLOC][YBLOC] = {0};
+   // int play = 0;
+    int map[XBLOC][YBLOC] = {/*0*/};
 
-    mur = IMG_Load("../sprites_mario/mur.jpg");
-    caisse = IMG_Load("../sprites_mario/caisse.jpg");
-    caisseOK = IMG_Load("../sprites_mario/caisseOK.jpg");
-    objectif = IMG_Load("../sprites_mario/objectif.png");
-    mario[LEFT] = IMG_Load("../sprites_mario/mario_gauche.gif");
-    mario[RIGHT] = IMG_Load("../sprites_mario/mario_droite.gif");
-    mario[DOWN] = IMG_Load("../sprites_mario/mario_bas.gif");
-    mario[UP] = IMG_Load("../sprites_mario/mario_haut.gif");
+    game->wall = IMG_Load("../sprites_mario/mur.jpg");
+    game->bloc = IMG_Load("../sprites_mario/caisse.jpg");
+    game->bloc_OK = IMG_Load("../sprites_mario/caisseOK.jpg");
+    game->goal = IMG_Load("../sprites_mario/objectif.png");
+    game->player_tab[LEFT] = IMG_Load("../sprites_mario/mario_gauche.gif");
+    game->player_tab[RIGHT] = IMG_Load("../sprites_mario/mario_droite.gif");
+    game->player_tab[DOWN] = IMG_Load("../sprites_mario/mario_bas.gif");
+    game->player_tab[UP] = IMG_Load("../sprites_mario/mario_haut.gif");
 
-    current_player = mario[RIGHT];
+    game->current_player = game->player_tab[RIGHT];
 
     //LEVEL UP
     if (!upload_level(map))
@@ -42,44 +46,44 @@ void    acive_game(SDL_Surface *screen)
         {
             while(i++ < YBLOC)
             {
-                if (map[j][Y] == MARIO)
+                if (map[j][i] == PLAYER)
                 {
                     pos_player.x = j;
                     pos_player.y = j;
-                    //carte[i][j] = VIDE;
+                    map[j][i] = VIDE;
                 }
             }
         }
     }
 
-    SDL_EnablekeyRepeat(100, 100);
+    //SDL_EnablekeyRepeat(100, 100);
 
     switch (event.type)
     {       
         case SDL_QUIT:
             play = 0;
             break;
-            case SDLK_UP;
-            current_player = mario[HAUT];
+		case SDL_SCANCODE_UP:
+            game->current_player = game->player_tab[UP];
             player_move(map, &pos_player, UP);
             break;
-            case SDLK_DOWN;
-            current_player = mario[DOWN];
+		case SDL_SCANCODE_DOWN:
+            game->current_player = game->player_tab[DOWN];
             player_move(map, &pos_player, DOWN);
             break;
 
-            case SDLK_LEFT;
-            current_player = mario[LEFT];
+		case SDL_SCANCODE_LEFT:
+            game->current_player = game->player_tab[LEFT];
             player_move(map, &pos_player, LEFT);
             break;
 
-            case SDLK_RIGHT;
-            current_player = mario[RIGHT];
+		case SDL_SCANCODE_RIGHT:
+            game->current_player = game->player_tab[RIGHT];
             player_move(map, &pos_player, RIGHT);
             break;   
     }
 
-    SDL_FillRect(screen, NULL, SDL_MapRGB(screen->format, 255, 255, 255));
+    SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 255, 255, 255));
     goal = 0;
     i = 0;
     while (i++ < XBLOC)
@@ -87,22 +91,22 @@ void    acive_game(SDL_Surface *screen)
         while (j++ < YBLOC)
         {
             pos_player.x = i * XBLOC;
-            pos_player.y = j ° YBLOC;
+            pos_player.y = j * YBLOC;
 
             switch (map[i][j])
             {
-                case = MUR:
-                    SDL_BlitSurface(mur, NULL, screen, &pos_player);
+                case  WALL:
+                    SDL_BlitSurface(game->wall, NULL, wn->screen, &pos_player);
                     break;
-                case = CAISSE:
-                    SDL_BlitSurface(caisse, NULL, screen, &pos_playe);
+                case  BLOC:
+                    SDL_BlitSurface(game->bloc, NULL, wn->screen, &pos_player);
                     break;
-                case = CAISSA_OK:
-                    SDL_BlitSurface(caisseOK, NULL, screen, &pos_playe);
+                case  BLOC_OK:
+                    SDL_BlitSurface(game->bloc_OK, NULL, wn->screen, &pos_player);
                     break;
 
-                case = OBJECTIF:
-                    SDL_BlitSurface(objectif, NULL, screen, &pos_playe);
+                case  GOAL:
+                    SDL_BlitSurface(game->goal, NULL, wn->screen, &pos_player);
                     goal = 1;
                     break;
             }
@@ -115,53 +119,103 @@ void    acive_game(SDL_Surface *screen)
     //player
     pos.x = pos_player.x * SIZE_BLOC;
     pos.y = pos_player.y * SIZE_BLOC;
-    SDL_BlitSurface(current_player, NULL, screen, &pos);
+	SDL_Texture *texture = SDL_CreateTextureFromSurface(wn->render, wn->screen);
+	
+	SDL_RenderClear(wn->render);
 
-    SDL_Flip(screen);
+	SDL_RenderCopy(wn->render, texture, NULL, NULL);
 
-    SDL_EnableKeyRepeat(0, 0);
+	SDL_RenderPresent(wn->render);
 
-    SDL_FreeSurface(wall);
-    SDL_FreeSurface(caisse);
-    SDL_FreeSurface(caisseOK);
-    SDL_FreeSurface(goal);
+    SDL_BlitSurface(game->current_player, NULL, wn->screen, &pos);
+
+   // SDL_EnableKeyRepeat(0, 0);
+
+    SDL_FreeSurface(game->wall);
+    SDL_FreeSurface(game->bloc);
+    SDL_FreeSurface(game->bloc_OK);
+    SDL_FreeSurface(game->goal);
     i = 0;
     while (i++ < 4)
-        SDL_FreeSurface(player[i]);
+        SDL_FreeSurface(game->player_tab[i]);
 }
 
 void    player_move(int map[][YBLOC], SDL_Rect *pos, int direction)
 {
     switch (direction)
     {
-        case HAUT:
+        case UP:
             if (pos->y - 1 < 0)
                 break;
-            if (map[pos->x][pos->y - 1] == MUR)
+            if (map[pos->x][pos->y - 1] == WALL)
                 break;
-            if ((map[pos->x][pos->y - 1] == CAISSE 
-                        || &map[pos->x][pos->y - 1] == CAISSE_OK)
-                    && (pos->y - 2 < 0 || map[pos->x][pos->y - 2] == MUR 
-                        || &map[pos->x][pos->y - 2] == CAISSE 
-                        || (map[pos->x][pos->y - 2] == CAISSE_OK)))
+            if ((map[pos->x][pos->y - 1] == BLOC
+                        || map[pos->x][pos->y - 1] == BLOC_OK)
+                    && (pos->y - 2 < 0 || map[pos->x][pos->y - 2] == WALL 
+                        || map[pos->x][pos->y - 2] == BLOC
+                        || (map[pos->x][pos->y - 2] == BLOC_OK)))
                 break;
-            move_bloc(&map[pos->x][pos->y - 1], &map[pos->x][pos->y - 2]);
+            move_bloc(map[pos->x][pos->y - 1], map[pos->x][pos->y - 2]);
+			pos->y--;
             break;
+          case DOWN:
+            if (pos->y + 1 < 0)
+                break;
+            if (map[pos->x][pos->y + 1] == WALL)
+                break;
+            if ((map[pos->x][pos->y + 1] == BLOC 
+                        || map[pos->x][pos->y + 1] == BLOC_OK)
+                    && (pos->y + 2 < 0 || map[pos->x][pos->y + 2] == WALL 
+                        || map[pos->x][pos->y + 2] == BLOC
+                        || (map[pos->x][pos->y + 2] == BLOC_OK)))
+                break;
+            move_bloc( map[pos->x][pos->y + 1], map[pos->x][pos->y + 2]);
+			pos->y++;
+            break;
+        case LEFT:
+            if (pos->x - 1 < 0)
+                break;
+            if (map[pos->x - 1][pos->y] == WALL)
+                break;
+            if ((map[pos->x - 1][pos->y] == BLOC
+                        || map[pos->x - 1][pos->y] == BLOC_OK)
+                    && (pos->x - 2 < 0 || map[pos->x - 2][pos->y] == WALL 
+                        || map[pos->x - 2][pos->y] == BLOC
+                        || (map[pos->x - 2][pos->y] == BLOC_OK)))
+                break;
+            move_bloc( map[pos->x - 1][pos->y], map[pos->x - 2][pos->y]);
+			pos->x--;
+            break;
+        case RIGHT:
+            if (pos->x + 1 < 0)
+                break;
+            if (map[pos->x + 1][pos->y] == WALL)
+                break;
+            if ((map[pos->x + 1][pos->y] == BLOC 
+						|| map[pos->x + 1][pos->y] == BLOC_OK)
+                    && (pos->x + 2 < 0 || map[pos->x + 2][pos->y] == WALL 
+                        || map[pos->x + 2][pos->y] == BLOC
+                        || (map[pos->x + 2][pos->y] == BLOC_OK)))
+                break;
+            move_bloc( map[pos->x + 1][pos->y], map[pos->x + 2][pos->y]);
+			pos->x++;
+            break;
+ 
     }
 }
 
-void    move_bloc(int   *first_case, int second_case)
+void    move_bloc(int first_case, int second_case)
 {
-    if (*first_case == CAISSE || *first_case == CAISSE_OK)
+    if (first_case == BLOC || first_case == BLOC_OK)
     {
-        if (*second_case == OBJECTIF)
-            *second_case = CAISSE_OK;
+        if (second_case == GOAL)
+            second_case = BLOC_OK;
         else
-            *second_case = CAISSE;
-        if (*first_case == CAISSE_OK)
-            *fisrt_case == OBJECTIF;
+            second_case = BLOC;
+        if (first_case == BLOC_OK)
+            first_case = GOAL;
         else
-            *first_case == VIDE;
+            first_case = VIDE;
     }
 }
 
