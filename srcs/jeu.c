@@ -1,6 +1,6 @@
 #include "../includes/sokoban.h"
 
-void    acive_game(struct t_win *wn)
+void    active_game(struct t_win *wn)
 {
 	struct t_game	*game;
 

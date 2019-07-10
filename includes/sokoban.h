@@ -54,7 +54,7 @@ int		save_level(int level[][YBLOC]);
 /* Jeu.c */
 void    move_bloc(int   first_case, int second_case);
 void    player_move(int map[][YBLOC], SDL_Rect *pos, int direction);
-void    active_game( struct t_win *wn);
+void    active_game(struct t_win *wn);
 
 /* main.c */
 int		main();
