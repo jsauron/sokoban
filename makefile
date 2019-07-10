@@ -6,7 +6,7 @@
 #    By: jsauron <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/01 18:30:18 by jsauron           #+#    #+#              #
-#    Updated: 2019/07/10 15:44:08 by jsauron          ###   ########.fr        #
+#    Updated: 2019/07/10 15:49:24 by jsauron          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,8 +42,8 @@ $(NAME): $(OBJS)
 clean:
 	@rm -f $(OBJS) 
 
-fclean:
-	@rm -f $(NAME) 
+fclean: clean
+	@rm -f $(NAME)  
 
 re: fclean
 	@$(MAKE)
