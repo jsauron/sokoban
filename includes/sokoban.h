@@ -41,6 +41,7 @@ typedef struct		s_win
 	SDL_Renderer	*render;
 	SDL_Texture		*texture;
 	SDL_Event		event;
+	Uint8			*state;
 	t_game			*game;
 }				t_win;
 

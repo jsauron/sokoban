@@ -25,14 +25,14 @@ void    active_game(t_win *wn)
    // int play = 0;
     int map[XBLOC][YBLOC] = {/*0*/};
 
-    game->wall = IMG_Load("../sprites_mario/mur.jpg");
-    game->bloc = IMG_Load("../sprites_mario/caisse.jpg");
-    game->bloc_OK = IMG_Load("../sprites_mario/caisseOK.jpg");
-    game->goal = IMG_Load("../sprites_mario/objectif.png");
-    game->player_tab[LEFT] = IMG_Load("../sprites_mario/mario_gauche.gif");
-    game->player_tab[RIGHT] = IMG_Load("../sprites_mario/mario_droite.gif");
-    game->player_tab[DOWN] = IMG_Load("../sprites_mario/mario_bas.gif");
-    game->player_tab[UP] = IMG_Load("../sprites_mario/mario_haut.gif");
+    game->wall = IMG_Load("sprites_mario/mur.jpg");
+    game->bloc = IMG_Load("sprites_mario/caisse.jpg");
+    game->bloc_OK = IMG_Load("sprites_mario/caisseOK.jpg");
+    game->goal = IMG_Load("sprites_mario/objectif.png");
+    game->player_tab[LEFT] = IMG_Load("sprites_mario/mario_gauche.gif");
+    game->player_tab[RIGHT] = IMG_Load("sprites_mario/mario_droite.gif");
+    game->player_tab[DOWN] = IMG_Load("sprites_mario/mario_bas.gif");
+    game->player_tab[UP] = IMG_Load("sprites_mario/mario_haut.gif");
 
     game->current_player = game->player_tab[RIGHT];
 
@@ -119,15 +119,14 @@ void    active_game(t_win *wn)
     //player
     pos.x = pos_player.x * SIZE_BLOC;
     pos.y = pos_player.y * SIZE_BLOC;
-	SDL_Texture *texture = SDL_CreateTextureFromSurface(wn->render, wn->screen);
+	//SDL_Texture *texture = SDL_CreateTextureFromSurface(wn->render, wn->screen);
 	
+    SDL_BlitSurface(game->current_player, NULL, wn->screen, &pos);\
+	SDL_UpdateTexture(wn->texture, NULL, wn->screen->pixels, wn->screen->pitch);
 	SDL_RenderClear(wn->render);
-
-	SDL_RenderCopy(wn->render, texture, NULL, NULL);
-
+	SDL_RenderCopy(wn->render, wn->texture, NULL, NULL);
 	SDL_RenderPresent(wn->render);
 
-    SDL_BlitSurface(game->current_player, NULL, wn->screen, &pos);
 
    // SDL_EnableKeyRepeat(0, 0);
 
