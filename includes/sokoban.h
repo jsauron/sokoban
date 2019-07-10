@@ -6,6 +6,7 @@
 #include "SDL_image.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <strings.h>
 
 /* constante */
 
@@ -41,7 +42,6 @@ typedef struct		s_win
 	SDL_Texture		*texture;
 	SDL_Event		event;
 	t_game			*game;
-
 }				t_win;
 
 /* Editor.c */

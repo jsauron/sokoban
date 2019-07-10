@@ -1,12 +1,12 @@
-#include "../includes/sokoban.h"
+#include "sokoban.h"
 
 int	main()
 {
-	struct t_win	*wn;
+	t_win			*wn;
 
-	if (!(wn = malloc(sizeof(struct t_win ))))
+	if (!(wn = malloc(sizeof(t_win ))))
 		exit (1);
-	if (!(wn->game = malloc(sizeof(struct t_game ))))
+	if (!(wn->game = malloc(sizeof(t_game))))
 		exit (1);
 	
 		int play = 1;

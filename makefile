@@ -6,18 +6,17 @@
 #    By: jsauron <marvin@42.fr>                     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/07/10 16:14:33 by jsauron           #+#    #+#              #
-#    Updated: 2019/07/10 16:29:31 by jsauron          ###   ########.fr        #
+#    Updated: 2019/07/10 17:52:21 by jsauron          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME 		= sokoban
-CC 			= gcc
+CC 			= clang
 CFLAGS 		= -Wall -Wextra -Werror -g -O3 #-fsanitize=address
 
 ID_UN 		= $(shell id -un)
 SRC_PATH 	= srcs/
 OBJ_PATH 	= objs/
-INC_PATH = includes/ \
 
 WHITE       = "\\033[0m"
 CYAN        = "\\033[36m"
@@ -38,37 +37,44 @@ SRC_NAME 	= main.c \
 				files.c \
 				editor.c
 
-OBJ_NAME = $(SRC_NAME:.c=.o)
+OBJ_NAME = $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC_NAME))
 LSDL2 	 = -L/Users/$(ID_UN)/.brew/lib/ -lSDL2 -lSDL2_ttf -lSDL2_image
 
+vpath %.c srcs/ 
+vpath %.h includes/
+
 SRC = $(addprefix $(SRC_PATH), $(SRC_NAME))
-OBJ = $(addprefix $(OBJ_PATH), $(OBJ_NAME))
+OBJ = $(OBJ_NAME)
 INC = $(addprefix -I, $(INC_PATH))
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
-			@printf "$(CYAN)[WAIT]$(WHITE) Compiling into %-50s\r" $(NAME)
-				@$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(INC) $(LSDL2)
-					@printf "$(GREEN)[OK]$(WHITE) %s has been well compiled\n" $(NAME)
-
 $(OBJ) : | $(OBJ_PATH)
 
 $(OBJ_PATH) :
-		@mkdir objs
+		mkdir objs
+
+$(NAME):  $(OBJ_PATH) $(OBJ_NAME)
+			printf "$(CYAN)[WAIT]$(WHITE) Compiling into %-50s\r" $(NAME)
+			$(CC) $(CFLAGS) $(OBJ) -o $(NAME) $(INC) $(LSDL2)
+			printf "$(GREEN)[OK]$(WHITE) %s has been well compiled\n" $(NAME)
+
+$(OBJ_NAME): ./$(OBJ_PATH)%.o : $(SRC_PATH)%.c
+	$(CC) $(CFLAGS) -I includes/ -c $< -o $@
 
 $(OBJ_PATH)%.o: $(SRC_PATH)%.c $(INC_PATH) Makefile
-		@printf "$(CYAN)[WAIT]$(WHITE) Compiling into .o %-50s\r" $@
-			@$(CC) $(CFLAGS) $(INC) -o $@ -c $<
+		printf "$(CYAN)[WAIT]$(WHITE) Compiling into .o %-50s\r" $@
+		$(CC) $(CFLAGS) $(INC) -o  -c $<
 
 clean:
-			@rm -rf $(OBJ_PATH)
-				@printf "$(GREEN)[OK]$(WHITE) Clean done\n"
+			rm -rf $(OBJ_PATH)
+			printf "$(GREEN)[OK]$(WHITE) Clean done\n"
 
 fclean: clean
-			@rm -f $(NAME)
-			@printf "$(GREEN)[OK]$(WHITE) Fclean done\n"
+			rm -f $(NAME)
+			printf "$(GREEN)[OK]$(WHITE) Fclean done\n"
 
 re: fclean all
+	@$(MAKE)
 
 .PHONY: all re clean fclean
