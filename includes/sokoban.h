@@ -18,7 +18,7 @@
 enum {UP, DOWN, LEFT, RIGHT};
 enum {VIDE, WALL, BLOC, GOAL, PLAYER, BLOC_OK};
 
-typedef struct		t_game
+typedef struct		s_game
 {
 	SDL_Surface		*player_tab[4];
 	SDL_Surface		*player;
@@ -28,9 +28,9 @@ typedef struct		t_game
 	SDL_Surface		*goal;
 	SDL_Surface		*current_player;
 
-}					s_game;
+}					t_game;
 
-typedef struct		t_win
+typedef struct		s_win
 {
 	SDL_Window		*window;
 	SDL_Surface*	screen;
@@ -40,12 +40,12 @@ typedef struct		t_win
 	SDL_Renderer	*render;
 	SDL_Texture		*texture;
 	SDL_Event		event;
-	struct t_game			*game;
+	t_game			*game;
 
-}				s_win;
+}				t_win;
 
 /* Editor.c */
-void	editor(struct t_win *wn, struct t_game *game);
+void	editor(t_win *wn, t_game *game);
 
 /* File.c */
 int		upload_level(int level[][YBLOC]);
@@ -54,7 +54,7 @@ int		save_level(int level[][YBLOC]);
 /* Jeu.c */
 void    move_bloc(int   first_case, int second_case);
 void    player_move(int map[][YBLOC], SDL_Rect *pos, int direction);
-void    active_game(struct t_win *wn);
+void    active_game(t_win *wn);
 
 /* main.c */
 int		main();

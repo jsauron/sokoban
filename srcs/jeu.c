@@ -1,8 +1,8 @@
 #include "../includes/sokoban.h"
 
-void    active_game(struct t_win *wn)
+void    active_game(t_win *wn)
 {
-	struct t_game	*game;
+	t_game	*game;
 
 	game = wn->game; 
 	game = wn->game;

@@ -6,13 +6,13 @@
 /*   By: jsauron <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/10 10:49:12 by jsauron           #+#    #+#             */
-/*   Updated: 2019/07/10 14:31:50 by jsauron          ###   ########.fr       */
+/*   Updated: 2019/07/10 16:50:28 by jsauron          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/sokoban.h"
 
-void	editor(struct t_win *wn, struct t_game *game)
+void	editor(t_win *wn, t_game *game)
 {
 	SDL_Rect pos;
 
