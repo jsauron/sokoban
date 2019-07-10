@@ -33,7 +33,7 @@ void    acive_game(SDL_Surface *screen)
     current_player = mario[RIGHT];
 
     //LEVEL UP
-    if (!upload_level(map)
+    if (!upload_level(map))
     {
         exit(EXIT_FAILURE);
         pos_player.x = 1;
@@ -44,14 +44,14 @@ void    acive_game(SDL_Surface *screen)
             {
                 if (map[j][Y] == MARIO)
                 {
-                pos_player.x = j;
-                 pos_player.y = j;
-                //carte[i][j] = VIDE;
+                    pos_player.x = j;
+                    pos_player.y = j;
+                    //carte[i][j] = VIDE;
                 }
             }
         }
     }
-    
+
     SDL_EnablekeyRepeat(100, 100);
 
     switch (event.type)
@@ -59,21 +59,21 @@ void    acive_game(SDL_Surface *screen)
         case SDL_QUIT:
             play = 0;
             break;
-        case SDLK_UP;
+            case SDLK_UP;
             current_player = mario[HAUT];
             player_move(map, &pos_player, UP);
             break;
-        case SDLK_DOWN;
+            case SDLK_DOWN;
             current_player = mario[DOWN];
             player_move(map, &pos_player, DOWN);
             break;
 
-        case SDLK_LEFT;
+            case SDLK_LEFT;
             current_player = mario[LEFT];
             player_move(map, &pos_player, LEFT);
             break;
 
-        case SDLK_RIGHT;
+            case SDLK_RIGHT;
             current_player = mario[RIGHT];
             player_move(map, &pos_player, RIGHT);
             break;   
@@ -89,26 +89,102 @@ void    acive_game(SDL_Surface *screen)
             pos_player.x = i * XBLOC;
             pos_player.y = j ° YBLOC;
 
-            swith(map[i][j])
-            case = MUR:
-                    SDL_BlitSurface(mur, NULL, ecran, &pos_player);
+            switch (map[i][j])
+            {
+                case = MUR:
+                    SDL_BlitSurface(mur, NULL, screen, &pos_player);
                     break;
-            case = CAISSE:
+                case = CAISSE:
                     SDL_BlitSurface(caisse, NULL, screen, &pos_playe);
                     break;
-            case = CAISSA_OK:
-                    SDL_BlitSurface(caisse, NULL, screen, &pos_playe);
+                case = CAISSA_OK:
+                    SDL_BlitSurface(caisseOK, NULL, screen, &pos_playe);
                     break;
 
-           case = CAISSE:
-                    SDL_BlitSurface(caisse, NULL, screen, &pos_playe);
+                case = OBJECTIF:
+                    SDL_BlitSurface(objectif, NULL, screen, &pos_playe);
+                    goal = 1;
                     break;
-
-           case = CAISSE:
-                    SDL_BlitSurface(caisse, NULL, screen, &pos_playe);
-                    break;
-
+            }
 
         }
     }
-    )
+    if (!goal) 
+        play = 0;
+
+    //player
+    pos.x = pos_player.x * SIZE_BLOC;
+    pos.y = pos_player.y * SIZE_BLOC;
+    SDL_BlitSurface(current_player, NULL, screen, &pos);
+
+    SDL_Flip(screen);
+
+    SDL_EnableKeyRepeat(0, 0);
+
+    SDL_FreeSurface(wall);
+    SDL_FreeSurface(caisse);
+    SDL_FreeSurface(caisseOK);
+    SDL_FreeSurface(goal);
+    i = 0;
+    while (i++ < 4)
+        SDL_FreeSurface(player[i]);
+}
+
+void    player_move(int map[][YBLOC], SDL_Rect *pos, int direction)
+{
+    switch (direction)
+    {
+        case HAUT:
+            if (pos->y - 1 < 0)
+                break;
+            if (map[pos->x][pos->y - 1] == MUR)
+                break;
+            if ((map[pos->x][pos->y - 1] == CAISSE 
+                        || &map[pos->x][pos->y - 1] == CAISSE_OK)
+                    && (pos->y - 2 < 0 || map[pos->x][pos->y - 2] == MUR 
+                        || &map[pos->x][pos->y - 2] == CAISSE 
+                        || (map[pos->x][pos->y - 2] == CAISSE_OK)))
+                break;
+            move_bloc(&map[pos->x][pos->y - 1], &map[pos->x][pos->y - 2]);
+            break;
+    }
+}
+
+void    move_bloc(int   *first_case, int second_case)
+{
+    if (*first_case == CAISSE || *first_case == CAISSE_OK)
+    {
+        if (*second_case == OBJECTIF)
+            *second_case = CAISSE_OK;
+        else
+            *second_case = CAISSE;
+        if (*first_case == CAISSE_OK)
+            *fisrt_case == OBJECTIF;
+        else
+            *first_case == VIDE;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
