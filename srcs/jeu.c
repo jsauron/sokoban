@@ -5,8 +5,10 @@ void    active_game(t_win *wn)
 	t_game	*game;
 
 	game = wn->game; 
-	game = wn->game;
-	//game->player_tab[4];/* = {NULL, NULL, NULL, NULL};*/
+	game->player_tab[0] = NULL;
+	game->player_tab[1] = NULL;
+	game->player_tab[2] = NULL;
+	game->player_tab[3] = NULL;
 	game->wall = NULL;
 	game->bloc = NULL;
 	game->bloc_OK = NULL;
@@ -21,7 +23,13 @@ void    active_game(t_win *wn)
 	int i = 0;
 	int j = 0;
 	// int play = 0;
-	int map[XBLOC][YBLOC] = {/*0*/};
+	//int map[XBLOC][YBLOC] = {/*0*/};
+  int **map;
+
+  map = NULL;
+  map = malloc(sizeof(int *) * XBLOC);
+  while (i < XBLOC)
+      map[i++] = malloc(sizeof(int) * YBLOC);
 
 	game->wall = IMG_Load("sprites_mario/mur.jpg");
 	if(!game->wall)
@@ -44,20 +52,25 @@ void    active_game(t_win *wn)
 	}
 	printf("ici cava \n");
 
-	pos_player.x = 1;
-	pos_player.y = 1;
-	while(j++ < XBLOC)
+	//pos_player.x = 1;
+	//pos_player.y = 1;
+  j = 0;
+	while(j < XBLOC)
 	{
-		while(i++ < YBLOC)
+    i = 0;
+		while(i < YBLOC)
 		{
+      printf("map[%d][%d] = %d\n", j, i, map[j][i]);
 			if (map[j][i] == PLAYER)
 			{
 				printf("le player est la \n");
 				pos_player.x = j;
-				pos_player.y = j;
+				pos_player.y = i;
 				map[j][i] = VIDE;
 			}
+      i++;
 		}
+    j++;
 	}
 
 	printf("ici cava  encore\n");
@@ -94,16 +107,18 @@ void    active_game(t_win *wn)
 	SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 255, 255, 255));
 	goal = 0;
 	i = 0;
-	j = 0;
-	while (i++ < XBLOC)
+	while (i < XBLOC)
 	{
-		while (j++ < YBLOC)
+    j = 0;
+		while (j < YBLOC)
 		{
-			pos_player.x = i * XBLOC;
-			pos_player.y = j * YBLOC;
+			pos_player.x = i * SIZE_BLOC;
+			pos_player.y = j * SIZE_BLOC;
+      printf("i * size = %d, %d\n", i, SIZE_BLOC);
 			printf("hbou\n");
 			switch (map[i][j])
 			{
+        printf("i = %d\n", i);
 				case  WALL:
 					printf("2eme switvh\n");
 					SDL_BlitSurface(game->wall, NULL, wn->screen, &pos_player);
@@ -119,7 +134,9 @@ void    active_game(t_win *wn)
 					goal = 1;
 					break;
 			}
+      j++;
 		}
+    i++;
 	}
 	printf("lkiolkiol\n");
 	if (!goal) 
@@ -141,16 +158,16 @@ void    active_game(t_win *wn)
 
 	// SDL_EnableKeyRepeat(0, 0);
 
-	SDL_FreeSurface(game->wall);
-	SDL_FreeSurface(game->bloc);
-	SDL_FreeSurface(game->bloc_OK);
-	SDL_FreeSurface(game->goal);
-	i = 0;
-	while (i++ < 4)
-		SDL_FreeSurface(game->player_tab[i]);
+	//SDL_FreeSurface(game->wall);
+	//SDL_FreeSurface(game->bloc);
+	//SDL_FreeSurface(game->bloc_OK);
+	//SDL_FreeSurface(game->goal);
+	//i = 0;
+	//while (i++ < 4)
+		//SDL_FreeSurface(game->player_tab[i]);
 }
 
-void    player_move(int map[][YBLOC], SDL_Rect *pos, int direction)
+void    player_move(int **map, SDL_Rect *pos, int direction)
 {
 	switch (direction)
 	{

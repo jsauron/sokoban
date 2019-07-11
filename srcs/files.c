@@ -1,6 +1,6 @@
 #include "../includes/sokoban.h"
 
-int     upload_level(int level[][YBLOC])
+int     upload_level(int **level)
 {
     FILE    *file = NULL;
     char	line_file[XBLOC * YBLOC + 1] = {0};
@@ -12,9 +12,10 @@ int     upload_level(int level[][YBLOC])
 		return (0);
 
 	fgets(line_file, XBLOC * YBLOC + 1, file);
-	while (i++ < XBLOC)
+	while ( i< XBLOC)
 	{
-		while (j++ < YBLOC)
+    j = 0;
+		while (j < YBLOC)
 		{
 			switch(line_file[(i * XBLOC) + j])
 			{
@@ -34,13 +35,15 @@ int     upload_level(int level[][YBLOC])
 					level[i][j] = 4;
 					break;
 			}
+      j++;
 		}
+    i++;
 	}
 	fclose(file);
 	return (1);
 }
 
-int		save_level(int level[][YBLOC])
+int		save_level(int **level)
 {
 	FILE	*file = NULL;
 	int	i = 0;
@@ -49,12 +52,15 @@ int		save_level(int level[][YBLOC])
 	file = fopen("niveau.lvl", "w");
 	if (file == NULL)
 		return (0);
-	while (i++ < XBLOC)
+	while (i < XBLOC)
 	{
-		while (j++ < YBLOC)
+    j = 0;
+		while (j < YBLOC)
 		{
 			fprintf(file,"%d",level[i][j]);
-		}
+		  j++;
+    }
+    i++;
 	}
 	fclose(file);
 	return (1);

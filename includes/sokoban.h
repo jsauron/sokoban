@@ -49,12 +49,12 @@ typedef struct		s_win
 void	editor(t_win *wn, t_game *game);
 
 /* File.c */
-int		upload_level(int level[][YBLOC]);
-int		save_level(int level[][YBLOC]);
+int		upload_level(int **level);
+int		save_level(int **level);
 
 /* Jeu.c */
 void    move_bloc(int   first_case, int second_case);
-void    player_move(int map[][YBLOC], SDL_Rect *pos, int direction);
+void    player_move(int **map, SDL_Rect *pos, int direction);
 void    active_game(t_win *wn);
 
 /* main.c */

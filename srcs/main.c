@@ -27,12 +27,13 @@ int	main()
 			SDL_TEXTUREACCESS_STREAMING,
 			XSCREEN, YSCREEN);
 //	SDL_SetRenderDrawColor(wn->render, 255, 0, 255, 255);
-	wn->menu = IMG_Load("sprites_mario/menu.jpg");
+	wn->menu = IMG_Load("sprites_mario/menu_soko.jpg");
 	if(!wn->menu)
 		printf("IMG_Load: %s\n", IMG_GetError());
 	wn->pos_menu.x = 0;
 	wn->pos_menu.y = 0;
 
+  SDL_PumpEvents();
 	wn->state = (Uint8*)SDL_GetKeyboardState(NULL);
 	while (play)
 	{
@@ -53,7 +54,7 @@ int	main()
 		}
 		SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 250, 0, 250));
 		SDL_BlitSurface(wn->menu, NULL, wn->screen, &(wn->pos_menu));
-	//	wn->texture = SDL_CreateTextureFromSurface(wn->render, wn->menu);
+//		wn->texture = SDL_CreateTextureFromSurface(wn->render, wn->menu);
 		SDL_UpdateTexture(wn->texture, NULL, wn->screen->pixels, wn->screen->pitch);
 		SDL_RenderClear(wn->render);
 		SDL_RenderCopy(wn->render, wn->texture, NULL, NULL);
