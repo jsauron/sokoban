@@ -19,6 +19,13 @@
 enum {UP, DOWN, LEFT, RIGHT};
 enum {VIDE, WALL, BLOC, GOAL, PLAYER, BLOC_OK};
 
+typedef	struct		s_mouse
+{
+	Uint32	mouse;
+	int		x;
+	int		y;
+}					t_mouse;
+
 typedef struct		s_game
 {
 	SDL_Surface		*player_tab[4];
@@ -43,6 +50,7 @@ typedef struct		s_win
 	SDL_Texture		*texture;
 	SDL_Event		event;
 	Uint8			*state;
+	t_mouse			input;
 	t_game			*game;
 }				t_win;
 

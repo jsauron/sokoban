@@ -12,7 +12,7 @@ int     upload_level(int **level)
 		return (0);
 
 	fgets(line_file, XBLOC * YBLOC + 1, file);
-	while ( i< XBLOC)
+	while ( i < XBLOC)
 	{
     j = 0;
 		while (j < YBLOC)
@@ -46,21 +46,21 @@ int     upload_level(int **level)
 int		save_level(int **level)
 {
 	FILE	*file = NULL;
-	int	i = 0;
-	int j = 0;
+	int	 x = 0;
+	int y = 0;
 
 	file = fopen("niveau.lvl", "w");
 	if (file == NULL)
 		return (0);
-	while (i < XBLOC)
+	while (y < YBLOC)
 	{
-    j = 0;
-		while (j < YBLOC)
+    x = 0;
+		while (x < XBLOC)
 		{
-			fprintf(file,"%d",level[i][j]);
-		  j++;
+			fprintf(file,"%d",level[y][x]);
+		  x++;
     }
-    i++;
+    y++;
 	}
 	fclose(file);
 	return (1);
