@@ -54,6 +54,11 @@ typedef struct		s_win
   t_game			*game;
 }				t_win;
 
+/* render.c*/
+int     render(t_win *wn);
+  
+/* input.c */
+
 /* editor.c */
 void	editor(t_win *wn, t_game *game);
 
@@ -74,5 +79,6 @@ int   init_structure(t_win *wn, t_game *game);
 
 /* main.c */
 int		main();
+
 
 #endif

@@ -36,7 +36,9 @@ SRC_NAME 	= main.c \
 				jeu.c \
 				files.c \
 				editor.c \
-				init.c
+				init.c \
+				render.c \
+				input.c
 
 OBJ_NAME = $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC_NAME))
 LSDL2 	 = -L/Users/$(ID_UN)/.brew/lib/ -lSDL2 -lSDL2_ttf -lSDL2_image
