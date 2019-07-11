@@ -3,13 +3,19 @@
 int	main()
 {
 	t_win			*wn;
+	int				i;
+	int			c = 0;
 
+	i = 0;
 	if (!(wn = malloc(sizeof(t_win ))))
 		exit (1);
 	if (!(wn->game = malloc(sizeof(t_game))))
 		exit (1);
-	
-		int play = 1;
+	if (!(wn->game->map = malloc(sizeof(int *) * XBLOC)))
+		exit (1);
+	while (i < XBLOC)
+		wn->game->map[i++] = malloc(sizeof(int) * YBLOC);
+	int play = 1;
 
 	SDL_Init(SDL_INIT_VIDEO);
 
@@ -26,14 +32,14 @@ int	main()
 			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_STREAMING,
 			XSCREEN, YSCREEN);
-//	SDL_SetRenderDrawColor(wn->render, 255, 0, 255, 255);
+	//	SDL_SetRenderDrawColor(wn->render, 255, 0, 255, 255);
 	wn->menu = IMG_Load("sprites_mario/menu_soko.jpg");
 	if(!wn->menu)
 		printf("IMG_Load: %s\n", IMG_GetError());
 	wn->pos_menu.x = 0;
 	wn->pos_menu.y = 0;
 
-  SDL_PumpEvents();
+	SDL_PumpEvents();
 	wn->state = (Uint8*)SDL_GetKeyboardState(NULL);
 	while (play)
 	{
@@ -52,9 +58,13 @@ int	main()
 			else if (wn->state[SDL_SCANCODE_2])
 				editor(wn, wn->game);
 		}
-		SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 250, 0, 250));
-		SDL_BlitSurface(wn->menu, NULL, wn->screen, &(wn->pos_menu));
-//		wn->texture = SDL_CreateTextureFromSurface(wn->render, wn->menu);
+		//		SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 250, 0, 250));
+		if (c == 0)
+		{
+			SDL_BlitSurface(wn->menu, NULL, wn->screen, &(wn->pos_menu));
+			c++;
+		}
+		//		wn->texture = SDL_CreateTextureFromSurface(wn->render, wn->menu);
 		SDL_UpdateTexture(wn->texture, NULL, wn->screen->pixels, wn->screen->pitch);
 		SDL_RenderClear(wn->render);
 		SDL_RenderCopy(wn->render, wn->texture, NULL, NULL);

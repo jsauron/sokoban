@@ -22,140 +22,113 @@ void    active_game(t_win *wn)
 	int goal = 0;
 	int i = 0;
 	int j = 0;
-	// int play = 0;
-	//int map[XBLOC][YBLOC] = {/*0*/};
-  int **map;
-
-  map = NULL;
-  map = malloc(sizeof(int *) * XBLOC);
-  while (i < XBLOC)
-      map[i++] = malloc(sizeof(int) * YBLOC);
 
 	game->wall = IMG_Load("sprites_mario/mur.jpg");
-	if(!game->wall)
-				printf("IMG_Load: %s\n", IMG_GetError());
+	game->player_tab[UP] = IMG_Load("sprites_mario/mario_haut.gif");
+	if(!game->player_tab[UP])
+		printf("IMG_Load: %s\n", IMG_GetError());
 	game->bloc = IMG_Load("sprites_mario/caisse.jpg");
 	game->bloc_OK = IMG_Load("sprites_mario/caisse_OK.jpg");
 	game->goal = IMG_Load("sprites_mario/objectif.png");
 	game->player_tab[LEFT] = IMG_Load("sprites_mario/mario_gauche.gif");
 	game->player_tab[RIGHT] = IMG_Load("sprites_mario/mario_droite.gif");
 	game->player_tab[DOWN] = IMG_Load("sprites_mario/mario_bas.gif");
-	game->player_tab[UP] = IMG_Load("sprites_mario/mario_haut.gif");
 	game->current_player = game->player_tab[RIGHT];
 
 	printf("ici\n");
 	//LEVEL UP
-	if (!upload_level(map))
+	if (!upload_level(game->map))
 	{
 		printf("exit\n");
 		exit(EXIT_FAILURE);
 	}
 	printf("ici cava \n");
 
-	//pos_player.x = 1;
-	//pos_player.y = 1;
-  j = 0;
 	while(j < XBLOC)
 	{
-    i = 0;
+		i = 0;
 		while(i < YBLOC)
 		{
-      printf("map[%d][%d] = %d\n", j, i, map[j][i]);
-			if (map[j][i] == PLAYER)
+			if (game->map[j][i] == PLAYER)
 			{
-				printf("le player est la \n");
 				pos_player.x = j;
 				pos_player.y = i;
-				map[j][i] = VIDE;
+				game->map[j][i] = VIDE;
 			}
-      i++;
+			i++;
 		}
-    j++;
+		j++;
 	}
 
-	printf("ici cava  encore\n");
-
-	//SDL_EnablekeyRepeat(100, 100);
-	//SDL_WaitEvent(&(wn->event));
-	switch (wn->event.type)
-	{       
-		printf("on rentre dans le switch\n");
-		case SDL_QUIT:
-			play = 0;
-			break;
-		case SDL_SCANCODE_UP:
-			game->current_player = game->player_tab[UP];
-			player_move(map, &pos_player, UP);
-			break;
-		case SDL_SCANCODE_DOWN:
-			game->current_player = game->player_tab[DOWN];
-			player_move(map, &pos_player, DOWN);
-			break;
-
-		case SDL_SCANCODE_LEFT:
-			game->current_player = game->player_tab[LEFT];
-			player_move(map, &pos_player, LEFT);
-			break;
-
-		case SDL_SCANCODE_RIGHT:
-			game->current_player = game->player_tab[RIGHT];
-			player_move(map, &pos_player, RIGHT);
-			break;   
-	}
-	
-		printf("kakaka\n");
-	SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 255, 255, 255));
-	goal = 0;
-	i = 0;
-	while (i < XBLOC)
+	SDL_PumpEvents();
+	wn->state = (Uint8*)SDL_GetKeyboardState(NULL);
+	while (play)
 	{
-    j = 0;
-		while (j < YBLOC)
+		printf("play\n");
+		//SDL_EnablekeyRepeat(100, 100);
+		SDL_WaitEvent(&(wn->event));
+		if (wn->event.type == SDL_QUIT || wn->state[SDL_SCANCODE_ESCAPE])
+			play = 0;
+		else if (wn->state[SDL_SCANCODE_UP])
 		{
-			pos_player.x = i * SIZE_BLOC;
-			pos_player.y = j * SIZE_BLOC;
-      printf("i * size = %d, %d\n", i, SIZE_BLOC);
-			printf("hbou\n");
-			switch (map[i][j])
-			{
-        printf("i = %d\n", i);
-				case  WALL:
-					printf("2eme switvh\n");
-					SDL_BlitSurface(game->wall, NULL, wn->screen, &pos_player);
-					break;
-				case  BLOC:
-					SDL_BlitSurface(game->bloc, NULL, wn->screen, &pos_player);
-					break;
-				case  BLOC_OK:
-					SDL_BlitSurface(game->bloc_OK, NULL, wn->screen, &pos_player);
-					break;
-				case  GOAL:
-					SDL_BlitSurface(game->goal, NULL, wn->screen, &pos_player);
-					goal = 1;
-					break;
-			}
-      j++;
+			game->current_player = game->player_tab[UP];
+			player_move(game->map, &pos_player, UP);
 		}
-    i++;
-	}
-	printf("lkiolkiol\n");
-	if (!goal) 
-		play = 0;
+		else if (wn->state[SDL_SCANCODE_DOWN])
+		{
+			game->current_player = game->player_tab[DOWN];
+			player_move(game->map, &pos_player, DOWN);
+		}
+		else if (wn->state[SDL_SCANCODE_LEFT])
+		{
+			game->current_player = game->player_tab[LEFT];
+			player_move(game->map, &pos_player, LEFT);
+		}
+		else if (wn->state[SDL_SCANCODE_RIGHT])
+		{
+			game->current_player = game->player_tab[RIGHT];
+			player_move(game->map, &pos_player, RIGHT);
+		}
 
-	//player
-	pos.x = pos_player.x * SIZE_BLOC;
-	pos.y = pos_player.y * SIZE_BLOC;
-	//wn->texture = SDL_CreateTextureFromSurface(wn->render, wn->screen);
-	printf("----------------l\n");
+		SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 255, 255, 255));
+		goal = 0;
+		i = 0;
+		while (i < XBLOC)
+		{
+			j = 0;
+			while (j < YBLOC)
+			{
+				pos.x = i * SIZE_BLOC;
+				pos.y = j * SIZE_BLOC;
+				if (game->map[i][j] == WALL)
+					SDL_BlitSurface(game->wall, NULL, wn->screen, &pos);
+				if (game->map[i][j] == BLOC)
+					SDL_BlitSurface(game->bloc, NULL, wn->screen, &pos);
+				if (game->map[i][j] == BLOC_OK)
+					SDL_BlitSurface(game->bloc_OK, NULL, wn->screen, &pos);
+				if (game->map[i][j] == GOAL)
+				{
+					SDL_BlitSurface(game->goal, NULL, wn->screen, &pos);
+					goal = 1;
+				}
+				j++;
+			}
+			i++;
+		}
+		if (!goal) 
+			play = 0;
 
-	SDL_BlitSurface(game->current_player, NULL, wn->screen, &pos);
-	SDL_UpdateTexture(wn->texture, NULL, wn->screen->pixels, wn->screen->pitch);
-	SDL_RenderClear(wn->render);
-	SDL_RenderCopy(wn->render, wn->texture, NULL, NULL);
-	SDL_RenderPresent(wn->render);
+		//player
+		pos.x = pos_player.x * SIZE_BLOC;
+		pos.y = pos_player.y * SIZE_BLOC;
+		//wn->texture = SDL_CreateTextureFromSurface(wn->render, wn->screen);
+		SDL_BlitSurface(game->current_player, NULL, wn->screen, &pos);
+		SDL_UpdateTexture(wn->texture, NULL, wn->screen->pixels, wn->screen->pitch);
+		SDL_RenderClear(wn->render);
+		SDL_RenderCopy(wn->render, wn->texture, NULL, NULL);
+		SDL_RenderPresent(wn->render);
 
-	printf("after blit ect\n");
-
+	
 	// SDL_EnableKeyRepeat(0, 0);
 
 	//SDL_FreeSurface(game->wall);
@@ -164,7 +137,8 @@ void    active_game(t_win *wn)
 	//SDL_FreeSurface(game->goal);
 	//i = 0;
 	//while (i++ < 4)
-		//SDL_FreeSurface(game->player_tab[i]);
+	//SDL_FreeSurface(game->player_tab[i]);
+	}
 }
 
 void    player_move(int **map, SDL_Rect *pos, int direction)
@@ -227,7 +201,6 @@ void    player_move(int **map, SDL_Rect *pos, int direction)
 			move_bloc( map[pos->x + 1][pos->y], map[pos->x + 2][pos->y]);
 			pos->x++;
 			break;
-
 	}
 }
 

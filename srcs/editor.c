@@ -6,7 +6,7 @@
 /*   By: jsauron <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/10 10:49:12 by jsauron           #+#    #+#             */
-/*   Updated: 2019/07/10 19:09:04 by jsauron          ###   ########.fr       */
+/*   Updated: 2019/07/11 11:55:24 by jsauron          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	editor(t_win *wn, t_game *game)
 	game->goal = IMG_Load("sprites_mario/objectif.png");
 	game->player = IMG_Load("sprites_mario/mario_bas.gif");
 
-	if(!upload_level(map))
+	if(!upload_level(game->map))
 		exit(EXIT_FAILURE);
 	if (wn->event.type == SDL_QUIT)
 		play = 0;
@@ -68,10 +68,10 @@ void	editor(t_win *wn, t_game *game)
 				play= 0;
 				break;
 			case SDL_SCANCODE_S:
-				save_level(map);
+				save_level(game->map);
 				break;
 			case SDL_SCANCODE_C:
-				save_level(map);
+				save_level(game->map);
 				break;
 			case SDL_SCANCODE_1:
 				current_obj = WALL;

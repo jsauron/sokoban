@@ -28,6 +28,7 @@ typedef struct		s_game
 	SDL_Surface		*bloc_OK;
 	SDL_Surface		*goal;
 	SDL_Surface		*current_player;
+	int				**map;
 
 }					t_game;
 
