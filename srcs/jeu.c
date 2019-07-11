@@ -146,6 +146,7 @@ void    player_move(int **map, SDL_Rect *pos, int direction)
 	switch (direction)
 	{
 		case UP:
+			printf("pos->y = %d\n", pos->y);
 			if (pos->y - 1 < 0)
 				break;
 			if (map[pos->y - 1][pos->x] == WALL)
@@ -154,9 +155,11 @@ void    player_move(int **map, SDL_Rect *pos, int direction)
 						|| map[pos->y - 1][pos->x] == BLOC_OK)
 					&& (pos->y - 2 < 0 || map[pos->y - 2][pos->x] == WALL 
 						|| map[pos->y - 2][pos->x] == BLOC
-						|| (map[pos->y][pos->x] == BLOC_OK)))
+						|| (map[pos->y - 2][pos->x] == BLOC_OK)))
 				break;
-			move_bloc(map[pos->y][pos->x - 1], map[pos->y][pos->x - 2]);
+			printf("pos->y - 1 = %d\n", pos->y - 1);
+			printf("pos->y - 2 = %d\n", pos->y - 2);
+			move_bloc(&map[pos->y - 1 ][pos->x], &map[pos->y - 2][pos->x]);
 			pos->y--;
 			break;
 		case DOWN:
@@ -170,7 +173,7 @@ void    player_move(int **map, SDL_Rect *pos, int direction)
 						|| map[pos->y + 2][pos->x] == BLOC
 						|| (map[pos->y + 2][pos->x] == BLOC_OK)))
 				break;
-			move_bloc( map[pos->y + 1][pos->x], map[pos->y + 2][pos->x]);
+			move_bloc( &map[pos->y + 1][pos->x], &map[pos->y + 2][pos->x]);
 			pos->y++;
 			break;
 		case LEFT:
@@ -184,7 +187,10 @@ void    player_move(int **map, SDL_Rect *pos, int direction)
 						|| map[pos->y][pos->x - 2] == BLOC
 						|| (map[pos->y][pos->x - 2] == BLOC_OK)))
 				break;
-			move_bloc( map[pos->y][pos->x - 1], map[pos->y][pos->x - 2]);
+			printf("pos-x - 1 = %d\n", pos->x - 1);
+			printf("pos->x - 2 = %d\n", pos->x - 2);
+			move_bloc(&map[pos->y - 1 ][pos->x], &map[pos->y - 2][pos->x]);
+			move_bloc( &map[pos->y][pos->x - 1], &map[pos->y][pos->x - 2]);
 			pos->x--;
 			break;
 		case RIGHT:
@@ -194,28 +200,28 @@ void    player_move(int **map, SDL_Rect *pos, int direction)
 				break;
 			if ((map[pos->y][pos->x + 1] == BLOC 
 						|| map[pos->y][pos->x + 1] == BLOC_OK)
-					&& (pos->x + 2 > 12 || map[pos->y][pos->x + 2] == WALL 
+					&& (pos->x + 2 > 11 || map[pos->y][pos->x + 2] == WALL 
 						|| map[pos->y][pos->x + 2] == BLOC
 						|| (map[pos->y][pos->x + 2] == BLOC_OK)))
 				break;
-			move_bloc( map[pos->y][pos->x + 1], map[pos->y][pos->x + 2]);
+			move_bloc( &map[pos->y][pos->x + 1], &map[pos->y][pos->x + 2]);
 			pos->x++;
 			break;
 	}
 }
 
-void    move_bloc(int first_case, int second_case)
+void    move_bloc(int *first_case, int *second_case)
 {
-	if (first_case == BLOC || first_case == BLOC_OK)
+	if (*first_case == BLOC || *first_case == BLOC_OK)
 	{
-		if (second_case == GOAL)
-			second_case = BLOC_OK;
+		if (*second_case == GOAL)
+			*second_case = BLOC_OK;
 		else
-			second_case = BLOC;
-		if (first_case == BLOC_OK)
-			first_case = GOAL;
+			*second_case = BLOC;
+		if (*first_case == BLOC_OK)
+			*first_case = GOAL;
 		else
-			first_case = VIDE;
+			*first_case = VIDE;
 	}
 }
 

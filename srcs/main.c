@@ -4,7 +4,6 @@ int	main()
 {
 	t_win			*wn;
 	int				i;
-	int			c = 0;
 
 	i = 0;
 	if (!(wn = malloc(sizeof(t_win ))))
@@ -32,7 +31,6 @@ int	main()
 			SDL_PIXELFORMAT_ARGB8888,
 			SDL_TEXTUREACCESS_STREAMING,
 			XSCREEN, YSCREEN);
-	//	SDL_SetRenderDrawColor(wn->render, 255, 0, 255, 255);
 	wn->menu = IMG_Load("sprites_mario/menu_soko.jpg");
 	if(!wn->menu)
 		printf("IMG_Load: %s\n", IMG_GetError());
@@ -56,15 +54,13 @@ int	main()
 				active_game(wn);
 			}
 			else if (wn->state[SDL_SCANCODE_2])
+			{
+				printf("editor\n");
 				editor(wn, wn->game);
+			}
 		}
 		//		SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 250, 0, 250));
-		if (c == 0)
-		{
 			SDL_BlitSurface(wn->menu, NULL, wn->screen, &(wn->pos_menu));
-			c++;
-		}
-		//		wn->texture = SDL_CreateTextureFromSurface(wn->render, wn->menu);
 		SDL_UpdateTexture(wn->texture, NULL, wn->screen->pixels, wn->screen->pitch);
 		SDL_RenderClear(wn->render);
 		SDL_RenderCopy(wn->render, wn->texture, NULL, NULL);

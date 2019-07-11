@@ -54,7 +54,7 @@ int		upload_level(int **level);
 int		save_level(int **level);
 
 /* Jeu.c */
-void    move_bloc(int   first_case, int second_case);
+void    move_bloc(int   *first_case, int *second_case);
 void    player_move(int **map, SDL_Rect *pos, int direction);
 void    active_game(t_win *wn);
 

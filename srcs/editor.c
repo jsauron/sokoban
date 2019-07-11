@@ -6,7 +6,7 @@
 /*   By: jsauron <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/10 10:49:12 by jsauron           #+#    #+#             */
-/*   Updated: 2019/07/11 11:55:24 by jsauron          ###   ########.fr       */
+/*   Updated: 2019/07/11 13:35:55 by jsauron          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,9 +20,8 @@ void	editor(t_win *wn, t_game *game)
 	int left_click = 0;
 	int right_click = 0;
 	int current_obj = WALL;
-	int i  = 0;
-	int j = 0;
-	int map[XBLOC][YBLOC] = {};
+	int x = 0;
+	int y = 0;
 
 	game->wall = IMG_Load("sprites_mario/mur.jpg");
 	game->bloc = IMG_Load("sprites_mario/caisse.jpg");
@@ -31,18 +30,21 @@ void	editor(t_win *wn, t_game *game)
 
 	if(!upload_level(game->map))
 		exit(EXIT_FAILURE);
+
+	while (play)
+	{
 	if (wn->event.type == SDL_QUIT)
 		play = 0;
 	else if (wn->event.type ==  SDL_MOUSEBUTTONDOWN)
 	{
 		if (wn->event.button.button == SDL_BUTTON_LEFT)
 		{
-			map[wn->event.button.x / SIZE_BLOC][wn->event.button.y / SIZE_BLOC] = current_obj;
+			game->map[wn->event.button.x / SIZE_BLOC][wn->event.button.y / SIZE_BLOC] = current_obj;
 			left_click = 1;
 		}
 		if (wn->event.button.button == SDL_BUTTON_RIGHT)
 		{
-			map[wn->event.button.x / SIZE_BLOC][wn->event.button.y / SIZE_BLOC] = VIDE;
+			game->map[wn->event.button.x / SIZE_BLOC][wn->event.button.y / SIZE_BLOC] = VIDE;
 			right_click = 1;
 		}
 	}
@@ -56,9 +58,9 @@ void	editor(t_win *wn, t_game *game)
 	if (wn->event.type ==  SDL_MOUSEMOTION)
 	{
 		if (left_click)
-			map[wn->event.motion.x / SIZE_BLOC][wn->event.motion.y / SIZE_BLOC] = current_obj;
+			game->map[wn->event.motion.x / SIZE_BLOC][wn->event.motion.y / SIZE_BLOC] = current_obj;
 		else if (right_click)
-			map[wn->event.motion.x / SIZE_BLOC][wn->event.motion.y / SIZE_BLOC] = VIDE;
+			game->map[wn->event.motion.x / SIZE_BLOC][wn->event.motion.y / SIZE_BLOC] = VIDE;
 	}
 	if (wn->event.type == SDL_KEYDOWN)
 	{
@@ -88,13 +90,15 @@ void	editor(t_win *wn, t_game *game)
 		}
 	}
 	SDL_FillRect(wn->screen ,NULL, SDL_MapRGB(wn->screen->format, 255, 255, 255));
-	while (i++ < XBLOC)
+	y = 0;
+	while (y < XBLOC)
 	{
-		while (j++ < YBLOC)
+		x = 0;
+		while (x < YBLOC)
 		{
-			pos.x = i * SIZE_BLOC;
-			pos.y = j * SIZE_BLOC;
-			switch (map[i][j])
+			pos.x = x * SIZE_BLOC;
+			pos.y = y * SIZE_BLOC;
+			switch (game->map[y][x])
 			{
 				case  WALL:
 					SDL_BlitSurface(game->wall, NULL, wn->screen, &pos);
@@ -109,14 +113,17 @@ void	editor(t_win *wn, t_game *game)
 					SDL_BlitSurface(game->goal, NULL, wn->screen, &pos);
 					break;
 			}
+			x++;
 		}
+		y++;
 	}
+	SDL_UpdateTexture(wn->texture, NULL, wn->screen->pixels, wn->screen->pitch);
 	SDL_RenderClear(wn->render);
-	SDL_CreateTextureFromSurface(wn->render, wn->screen);
+	//SDL_CreateTextureFromSurface(wn->render, wn->screen);
 	SDL_RenderCopy(wn->render, wn->texture, NULL, NULL);
 
 	SDL_RenderPresent(wn->render);
-
+	}
 	SDL_FreeSurface(game->wall);
 	SDL_FreeSurface(game->bloc);
 	SDL_FreeSurface(game->goal);
