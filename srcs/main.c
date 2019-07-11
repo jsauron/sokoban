@@ -23,7 +23,7 @@ int	main()
     SDL_BlitSurface(wn->menu, NULL, wn->screen, &(wn->pos_menu));
     render(wn);
   }
-  SDL_FreeSurface(wn->menu);
+  free_game(wn, wn->game);
   SDL_Quit();
 
   return (0);

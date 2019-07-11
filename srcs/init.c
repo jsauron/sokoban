@@ -45,6 +45,7 @@ int  init_structure(t_win *wn, t_game *game)
   wn->pos_menu.x = 0;
   wn->pos_menu.y = 0;
 
+  game->nb_goal = 0;
   game->player_tab[0] = NULL;
   game->player_tab[1] = NULL;
   game->player_tab[2] = NULL;

@@ -36,7 +36,7 @@ typedef struct		s_game
   SDL_Surface		*goal;
   SDL_Surface		*current_player;
   int				**map;
-
+  int       nb_goal;
 }					t_game;
 
 typedef struct		s_win
@@ -55,22 +55,24 @@ typedef struct		s_win
 }				t_win;
 
 /* render.c*/
+int     fill_screen(t_win *wn,t_game *game, SDL_Rect *pos, SDL_Rect *pos_player,int **map);
 int     render(t_win *wn);
-  
+int     free_game(t_win *wn, t_game *game);  
+
 /* input.c */
 
 /* editor.c */
 void	editor(t_win *wn, t_game *game);
 
 /* file.c */
-int		upload_level(int **level);
+int		upload_map(int **level);
 int		save_level(int **level);
 
 /* jeu.c */
 void    move_bloc(int   *first_case, int *second_case);
 void    player_move(int **map, SDL_Rect *pos, int direction);
 void    active_game(t_win *wn);
-
+int     parse_map(int   **map, SDL_Rect *pos_player);
 /* init.c*/
 t_win   *init(t_win  *wn);
 int   malloc_structure(t_win *wn);

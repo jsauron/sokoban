@@ -28,7 +28,7 @@ void	editor(t_win *wn, t_game *game)
 	game->goal = IMG_Load("sprites_mario/objectif.png");
 	game->player = IMG_Load("sprites_mario/mario_bas.gif");
 
-	if(!upload_level(game->map))
+	if(!upload_map(game->map))
 		exit(EXIT_FAILURE);
 
 	SDL_PumpEvents();
@@ -73,7 +73,7 @@ void	editor(t_win *wn, t_game *game)
 			else if (wn->state[SDL_SCANCODE_S])
 				save_level(game->map);
 			else if (wn->state[SDL_SCANCODE_C])
-				upload_level(game->map);
+				upload_map(game->map);
 			else if (wn->state[SDL_SCANCODE_1])
 				current_obj = WALL;
 			else if (wn->state[SDL_SCANCODE_2])

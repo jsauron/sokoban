@@ -1,6 +1,6 @@
 #include "../includes/sokoban.h"
 
-int     upload_level(int **level)
+int     upload_map(int **level)
 {
     FILE    *file = NULL;
     char	line_file[XBLOC * YBLOC + 1] = {0};
