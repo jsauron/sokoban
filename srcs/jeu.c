@@ -2,19 +2,7 @@
 
 void    active_game(t_win *wn)
 {
-	t_game	*game;
-
-	game = wn->game; 
-	game->player_tab[0] = NULL;
-	game->player_tab[1] = NULL;
-	game->player_tab[2] = NULL;
-	game->player_tab[3] = NULL;
-	game->wall = NULL;
-	game->bloc = NULL;
-	game->bloc_OK = NULL;
-	game->goal = NULL;
-	game->current_player = NULL;
-
+  t_game        *game;
 	SDL_Rect       pos;
 	SDL_Rect       pos_player;
 
@@ -22,21 +10,9 @@ void    active_game(t_win *wn)
 	int goal = 0;
 	int x = 0;
 	int y = 0;
-
-	game->wall = IMG_Load("sprites_mario/mur.jpg");
-	game->player_tab[UP] = IMG_Load("sprites_mario/mario_haut.gif");
-	if(!game->player_tab[UP])
-		printf("IMG_Load: %s\n", IMG_GetError());
-	game->bloc = IMG_Load("sprites_mario/caisse.jpg");
-	game->bloc_OK = IMG_Load("sprites_mario/caisse_OK.jpg");
-	game->goal = IMG_Load("sprites_mario/objectif.png");
-	game->player_tab[LEFT] = IMG_Load("sprites_mario/mario_gauche.gif");
-	game->player_tab[RIGHT] = IMG_Load("sprites_mario/mario_droite.gif");
-	game->player_tab[DOWN] = IMG_Load("sprites_mario/mario_bas.gif");
-	game->current_player = game->player_tab[RIGHT];
-
-	printf("ici\n");
-	//LEVEL UP
+  game = wn->game;
+	
+  //LEVEL UP
 	if (!upload_level(game->map))
 	{
 		printf("exit\n");

@@ -35,7 +35,8 @@ INC_PATH+= /Users/$(ID_UN)/.brew/Cellar/sdl2/$(SDL_NUM)/include/ \
 SRC_NAME 	= main.c \
 				jeu.c \
 				files.c \
-				editor.c
+				editor.c \
+				init.c
 
 OBJ_NAME = $(patsubst %.c, $(OBJ_PATH)%.o, $(SRC_NAME))
 LSDL2 	 = -L/Users/$(ID_UN)/.brew/lib/ -lSDL2 -lSDL2_ttf -lSDL2_image
