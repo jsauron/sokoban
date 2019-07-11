@@ -6,7 +6,7 @@
 /*   By: jsauron <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/07/10 10:49:12 by jsauron           #+#    #+#             */
-/*   Updated: 2019/07/11 14:39:42 by jsauron          ###   ########.fr       */
+/*   Updated: 2019/07/11 14:56:09 by jsauron          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,7 +73,7 @@ void	editor(t_win *wn, t_game *game)
 			else if (wn->state[SDL_SCANCODE_S])
 				save_level(game->map);
 			else if (wn->state[SDL_SCANCODE_C])
-				save_level(game->map);
+				upload_level(game->map);
 			else if (wn->state[SDL_SCANCODE_1])
 				current_obj = WALL;
 			else if (wn->state[SDL_SCANCODE_2])

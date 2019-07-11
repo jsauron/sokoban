@@ -189,7 +189,6 @@ void    player_move(int **map, SDL_Rect *pos, int direction)
 				break;
 			printf("pos-x - 1 = %d\n", pos->x - 1);
 			printf("pos->x - 2 = %d\n", pos->x - 2);
-			move_bloc(&map[pos->y - 1 ][pos->x], &map[pos->y - 2][pos->x]);
 			move_bloc( &map[pos->y][pos->x - 1], &map[pos->y][pos->x - 2]);
 			pos->x--;
 			break;
