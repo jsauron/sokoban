@@ -20,8 +20,8 @@ void    active_game(t_win *wn)
 
 	int play = 1;
 	int goal = 0;
-	int i = 0;
-	int j = 0;
+	int x = 0;
+	int y = 0;
 
 	game->wall = IMG_Load("sprites_mario/mur.jpg");
 	game->player_tab[UP] = IMG_Load("sprites_mario/mario_haut.gif");
@@ -44,20 +44,20 @@ void    active_game(t_win *wn)
 	}
 	printf("ici cava \n");
 
-	while(j < XBLOC)
+	while(y < YBLOC)
 	{
-		i = 0;
-		while(i < YBLOC)
+		x = 0;
+		while(x < XBLOC)
 		{
-			if (game->map[j][i] == PLAYER)
+			if (game->map[y][x] == PLAYER)
 			{
-				pos_player.x = j;
-				pos_player.y = i;
-				game->map[j][i] = VIDE;
+				pos_player.x = x;
+				pos_player.y = y;
+				game->map[y][x] = VIDE;
 			}
-			i++;
+			x++;
 		}
-		j++;
+		y++;
 	}
 
 	SDL_PumpEvents();
@@ -92,28 +92,28 @@ void    active_game(t_win *wn)
 
 		SDL_FillRect(wn->screen, NULL, SDL_MapRGB(wn->screen->format, 255, 255, 255));
 		goal = 0;
-		i = 0;
-		while (i < XBLOC)
+		y = 0;
+		while (y < YBLOC)
 		{
-			j = 0;
-			while (j < YBLOC)
+			x = 0;
+			while (x < XBLOC)
 			{
-				pos.x = i * SIZE_BLOC;
-				pos.y = j * SIZE_BLOC;
-				if (game->map[i][j] == WALL)
+				pos.x = x * SIZE_BLOC;
+				pos.y = y * SIZE_BLOC;
+				if (game->map[y][x] == WALL)
 					SDL_BlitSurface(game->wall, NULL, wn->screen, &pos);
-				if (game->map[i][j] == BLOC)
+				if (game->map[y][x] == BLOC)
 					SDL_BlitSurface(game->bloc, NULL, wn->screen, &pos);
-				if (game->map[i][j] == BLOC_OK)
+				if (game->map[y][x] == BLOC_OK)
 					SDL_BlitSurface(game->bloc_OK, NULL, wn->screen, &pos);
-				if (game->map[i][j] == GOAL)
+				if (game->map[y][x] == GOAL)
 				{
 					SDL_BlitSurface(game->goal, NULL, wn->screen, &pos);
 					goal = 1;
 				}
-				j++;
+				x++;
 			}
-			i++;
+			y++;
 		}
 		if (!goal) 
 			play = 0;
@@ -148,57 +148,57 @@ void    player_move(int **map, SDL_Rect *pos, int direction)
 		case UP:
 			if (pos->y - 1 < 0)
 				break;
-			if (map[pos->x][pos->y - 1] == WALL)
+			if (map[pos->y - 1][pos->x] == WALL)
 				break;
-			if ((map[pos->x][pos->y - 1] == BLOC
-						|| map[pos->x][pos->y - 1] == BLOC_OK)
-					&& (pos->y - 2 < 0 || map[pos->x][pos->y - 2] == WALL 
-						|| map[pos->x][pos->y - 2] == BLOC
-						|| (map[pos->x][pos->y - 2] == BLOC_OK)))
+			if ((map[pos->y - 1][pos->x] == BLOC
+						|| map[pos->y - 1][pos->x] == BLOC_OK)
+					&& (pos->y - 2 < 0 || map[pos->y - 2][pos->x] == WALL 
+						|| map[pos->y - 2][pos->x] == BLOC
+						|| (map[pos->y][pos->x] == BLOC_OK)))
 				break;
-			move_bloc(map[pos->x][pos->y - 1], map[pos->x][pos->y - 2]);
+			move_bloc(map[pos->y][pos->x - 1], map[pos->y][pos->x - 2]);
 			pos->y--;
 			break;
 		case DOWN:
-			if (pos->y + 1 < 0)
+			if (pos->y + 1 > 11)
 				break;
-			if (map[pos->x][pos->y + 1] == WALL)
+			if (map[pos->y + 1][pos->x] == WALL)
 				break;
-			if ((map[pos->x][pos->y + 1] == BLOC 
-						|| map[pos->x][pos->y + 1] == BLOC_OK)
-					&& (pos->y + 2 < 0 || map[pos->x][pos->y + 2] == WALL 
-						|| map[pos->x][pos->y + 2] == BLOC
-						|| (map[pos->x][pos->y + 2] == BLOC_OK)))
+			if ((map[pos->y + 1][pos->x] == BLOC 
+						|| map[pos->y + 1][pos->x] == BLOC_OK)
+					&& (pos->y + 2 > 11 || map[pos->y + 2][pos->x] == WALL 
+						|| map[pos->y + 2][pos->x] == BLOC
+						|| (map[pos->y + 2][pos->x] == BLOC_OK)))
 				break;
-			move_bloc( map[pos->x][pos->y + 1], map[pos->x][pos->y + 2]);
+			move_bloc( map[pos->y + 1][pos->x], map[pos->y + 2][pos->x]);
 			pos->y++;
 			break;
 		case LEFT:
 			if (pos->x - 1 < 0)
 				break;
-			if (map[pos->x - 1][pos->y] == WALL)
+			if (map[pos->y][pos->x - 1] == WALL)
 				break;
-			if ((map[pos->x - 1][pos->y] == BLOC
-						|| map[pos->x - 1][pos->y] == BLOC_OK)
-					&& (pos->x - 2 < 0 || map[pos->x - 2][pos->y] == WALL 
-						|| map[pos->x - 2][pos->y] == BLOC
-						|| (map[pos->x - 2][pos->y] == BLOC_OK)))
+			if ((map[pos->y][pos->x - 1] == BLOC
+						|| map[pos->y][pos->x - 1] == BLOC_OK)
+					&& (pos->x - 2 < 0 || map[pos->y][pos->x - 2] == WALL 
+						|| map[pos->y][pos->x - 2] == BLOC
+						|| (map[pos->y][pos->x - 2] == BLOC_OK)))
 				break;
-			move_bloc( map[pos->x - 1][pos->y], map[pos->x - 2][pos->y]);
+			move_bloc( map[pos->y][pos->x - 1], map[pos->y][pos->x - 2]);
 			pos->x--;
 			break;
 		case RIGHT:
-			if (pos->x + 1 < 0)
+			if (pos->x + 1 > 11)
 				break;
-			if (map[pos->x + 1][pos->y] == WALL)
+			if (map[pos->y][pos->x + 1] == WALL)
 				break;
-			if ((map[pos->x + 1][pos->y] == BLOC 
-						|| map[pos->x + 1][pos->y] == BLOC_OK)
-					&& (pos->x + 2 < 0 || map[pos->x + 2][pos->y] == WALL 
-						|| map[pos->x + 2][pos->y] == BLOC
-						|| (map[pos->x + 2][pos->y] == BLOC_OK)))
+			if ((map[pos->y][pos->x + 1] == BLOC 
+						|| map[pos->y][pos->x + 1] == BLOC_OK)
+					&& (pos->x + 2 > 12 || map[pos->y][pos->x + 2] == WALL 
+						|| map[pos->y][pos->x + 2] == BLOC
+						|| (map[pos->y][pos->x + 2] == BLOC_OK)))
 				break;
-			move_bloc( map[pos->x + 1][pos->y], map[pos->x + 2][pos->y]);
+			move_bloc( map[pos->y][pos->x + 1], map[pos->y][pos->x + 2]);
 			pos->x++;
 			break;
 	}
